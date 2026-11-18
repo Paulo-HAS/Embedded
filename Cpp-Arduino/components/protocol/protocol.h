@@ -4,7 +4,7 @@
 namespace proto{    // criando namespace custom
 
     constexpr uint8_t SYNC = 0xAA;  // byte marcador de início de mensagem, mantem o sincronismo
-    enum Type : uint8_t { LED = 1 }; // lista dos tipos de componentes
+    enum Type : uint8_t { LED = 1, SERVO = 2 }; // lista dos tipos de componentes
 
     struct Msg {    // mensagem de 5 bytes na ordem de stream do serial
         uint8_t sync, type, pin, value, crc;    // crc = checksum para verificar erro

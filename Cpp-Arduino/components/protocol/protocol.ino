@@ -1,6 +1,23 @@
+#include <Servo.h>
 #include "protocol.h"
 
 using namespace proto;  
+
+Servo servos[MAX_SERVOS];
+uint8_t servoPins[MAX_SERVOS];
+uint8_t servoCount = 0;
+
+// função de atuação dos servos
+void moveServo(uint8_t pin, uint8_t angle) {
+    for (uint8_t i = 0; i < servoCount; i++)
+        if (servoPins[i] == pin) {servos[i].write(angle); return; }
+    if (servoCount < MAX_SERVOS) {
+        servoPins[servoCount] = pin;
+        servos[servoCount].attach(pin);
+        servos[servoCount++].write(angle);
+    }
+}
+
 
 void handle(const Msg &m) {
     switch (m.type) {
@@ -8,6 +25,9 @@ void handle(const Msg &m) {
         pinMode(m.pin, OUTPUT);
         analogWrite(m.pin, m.value);
         break;
+        case SERVO:
+            moveServo(m.pin, m.value);
+            break;
     }
 }
 
